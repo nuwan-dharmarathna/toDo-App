@@ -1,11 +1,20 @@
 const express = require('express');
 const toDoControllers = require('./../controllers/toDoControllers');
+const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(toDoControllers.getAllToDos)
-  .post(toDoControllers.createToDo);
+  .get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    toDoControllers.getAllToDos
+  )
+  .post(
+    authController.protect,
+    authController.restrictTo('admin'),
+    toDoControllers.createToDo
+  );
 
 module.exports = router;
